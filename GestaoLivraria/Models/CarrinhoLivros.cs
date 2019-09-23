@@ -16,7 +16,7 @@ namespace GestaoLivraria.Models
             List<CarrinhoLivros> v_CarrinhosLivros = new List<CarrinhoLivros>();
 
             v_CarrinhosLivros = CarrinhoLivros.GerarCarrinhoLivros();
-            v_CarrinhoLivros = v_CarrinhosLivros.SingleOrDefault(q => q.Id ==p_Id);
+            v_CarrinhoLivros = v_CarrinhosLivros.SingleOrDefault(q => q.Id == p_Id);
             
 //            if (v_CarrinhoLivros == null)
 //            {
@@ -29,10 +29,11 @@ namespace GestaoLivraria.Models
         public static List<CarrinhoLivros> GerarCarrinhoLivros()
         {
             List<CarrinhoLivros> v_CarrinhosLivros = new List<CarrinhoLivros>();
-            List<Livro> v_ListLivros = new List<Livro>();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 1; i <= 100; i++)
             {
+                List<Livro> v_ListLivros = new List<Livro>();
+                
                 for (int z = 1; z <= ((i%5)*5) + 1; z++)
                 {
                     var v_Livro = new Livro()
@@ -49,7 +50,7 @@ namespace GestaoLivraria.Models
                     Id = i,
                     Livros = v_ListLivros,
                 };
-
+                
                 v_CarrinhosLivros.Add(v_CarrinhoLivros);
             }
 

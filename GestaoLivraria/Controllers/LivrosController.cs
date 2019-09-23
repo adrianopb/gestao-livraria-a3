@@ -57,6 +57,28 @@ namespace GestaoLivraria.Controllers
                 Nome = Livro.Nome
             };
         }
+        
+        // POST v1/livros/{id}/comentarios
+        [HttpPost]
+        [Route("{id}/comentarios")]
+        public Livro Post([FromRoute] int id,[Bind("Texto")] string texto)
+        {
+            //if (value.Id <= 100)
+            //{
+            //  falta gerar a exceção
+            //}
+
+            Livro v_Livro = new Livro();
+            IEnumerable<Livro> v_Livros = new List<Livro>();
+            
+            v_Livros = v_Livro.BuscarLivros(id);
+            v_Livro = v_Livros.Single();
+            
+            Comentario v_Comentario = new Comentario();
+            v_Livro = v_Comentario.CriarComentario(id, texto);
+
+            return v_Livro;
+        }
 
         // PUT api/livros/5
         [HttpPut("{id}")]

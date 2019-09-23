@@ -9,6 +9,7 @@ namespace GestaoLivraria.Models
     {
         public int Id { get; set; }
         public string Nome { get; set; }
+        public List<Comentario> Comentarios { get; set; }
 
         public IEnumerable<Livro> BuscarLivros(int? id)
         {
@@ -22,6 +23,31 @@ namespace GestaoLivraria.Models
             return v_ListaLivros;
         }
 
+        public Livro BuscarLivroNoCarrinho(int p_CarrinhoId, int p_LivroId)
+        {
+            CarrinhoLivros v_CarrinhoLivros = new CarrinhoLivros();
+            List<CarrinhoLivros> v_CarrinhosLivros = new List<CarrinhoLivros>();
+
+            v_CarrinhosLivros = CarrinhoLivros.GerarCarrinhoLivros();
+            v_CarrinhoLivros = v_CarrinhosLivros.SingleOrDefault(q => q.Id == p_CarrinhoId);
+            
+//            if (v_CarrinhoLivros == null)
+//            {
+//                404
+//            }
+
+            Livro v_Livro = new Livro();
+
+            v_Livro = v_CarrinhoLivros.Livros.SingleOrDefault(q => q.Id == p_LivroId);
+            
+//            if (v_Livro == null)
+//            {
+//                404
+//            }
+
+            return v_Livro;
+        }
+        
         public IEnumerable<Livro> ListaLivros()
         {
             var v_ListaLivros = new List<Livro>();

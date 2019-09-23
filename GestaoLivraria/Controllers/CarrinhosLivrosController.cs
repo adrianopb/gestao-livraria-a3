@@ -14,37 +14,27 @@ namespace GestaoLivraria.Controllers
     [ApiController]
     public class CarrinhosLivrosController : ControllerBase
     {
-        // GET v1/pedidos
-        [HttpGet]
-        //        public ActionResult<IEnumerable<Pedido>> Get()
-        //        {
-        //            Pedido v_Pedido = new Pedido();
-        //            
-        //            List<Pedido> v_
-        //            
-        //            return new string[] { "value1", "value2" };
-        //        }
-        
-        // POST v1/carrinhosLivros/{id_carrinhosLivros}/livro/{id_livros}
+        // POST v1/carrinhosLivros/{id_carrinhosLivros}/livros/{id_livros}
         [HttpPost]
-        public CarrinhoLivros Post([Bind("Id")] CarrinhoLivros p_CarrinhoLivros, [Bind("Id")] Livro p_Livro)
+        [Route("{idCarrinhosLivros:int}/livros/{idLivros:int}")]
+        public CarrinhoLivros Post([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)
         {
             //Limpar código
             CarrinhoLivros v_CarrinhoLivrosAdicionar = new CarrinhoLivros();
-            v_CarrinhoLivrosAdicionar = v_CarrinhoLivrosAdicionar.BuscarCarrinhoLivros(p_CarrinhoLivros.Id);
+            v_CarrinhoLivrosAdicionar = v_CarrinhoLivrosAdicionar.BuscarCarrinhoLivros(idCarrinhosLivros);
 
 //            if (v_CarrinhoLivrosAdicionar == null)
 //            {
-//                404
+//                404 (carrinho não encontrado)
 //            }
 
             Livro v_Livro = new Livro();
             IEnumerable<Livro> v_LivroAdicionar = new List<Livro>();
-            v_LivroAdicionar = v_Livro.BuscarLivros(p_Livro.Id);
+            v_LivroAdicionar = v_Livro.BuscarLivros(idLivros);
 
 //            if (v_LivroAdicionar == null)
 //            {
-//                404
+//                404 (livro não encontrado)
 //            }
 
             v_Livro = v_LivroAdicionar.First();
@@ -52,10 +42,20 @@ namespace GestaoLivraria.Controllers
             return v_CarrinhoLivrosAdicionar;
         }
 
-        // DELETE v1/carrinhosLivros/{id_carrinhosLivros}/livro/{id_livros}
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE v1/carrinhosLivros/{id_carrinhosLivros}/livros/{id_livros}
+        [HttpDelete]
+        [Route("{idCarrinhosLivros}/livros/{idLivros}")]
+        public CarrinhoLivros Delete([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)
         {
+            CarrinhoLivros v_CarrinhoLivrosRemover = new CarrinhoLivros();
+            v_CarrinhoLivrosRemover = v_CarrinhoLivrosRemover.BuscarCarrinhoLivros(idCarrinhosLivros);
+            
+            Livro v_LivroRemover = new Livro();
+            v_LivroRemover = v_LivroRemover.BuscarLivroNoCarrinho(idCarrinhosLivros, idLivros);
+            
+            v_CarrinhoLivrosRemover.Livros.RemoveAll(q => q.Id == v_LivroRemover.Id);
+            
+            return v_CarrinhoLivrosRemover;
         }
     }
 }

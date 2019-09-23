@@ -14,17 +14,6 @@ namespace GestaoLivraria.Controllers
     [ApiController]
     public class PedidosController : ControllerBase
     {
-        // GET v1/pedidos
-        [HttpGet]
-        //        public ActionResult<IEnumerable<Pedido>> Get()
-        //        {
-        //            Pedido v_Pedido = new Pedido();
-        //            
-        //            List<Pedido> v_
-        //            
-        //            return new string[] { "value1", "value2" };
-        //        }
-
         // GET v1/pedidos/5
         [HttpGet("{id}")]
         public Pedido Get(int id)
