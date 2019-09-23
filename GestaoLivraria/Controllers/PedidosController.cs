@@ -12,62 +12,62 @@ namespace GestaoLivraria.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
-    public class LivrosController : ControllerBase
+    public class PedidosController : ControllerBase
     {
-        // GET api/livros
+        // GET v1/pedidos
         [HttpGet]
-        //        public ActionResult<IEnumerable<Livro>> Get()
+        //        public ActionResult<IEnumerable<Pedido>> Get()
         //        {
-        //            Livro v_Livro = new Livro();
+        //            Pedido v_Pedido = new Pedido();
         //            
-        //            List<Livro> v_
+        //            List<Pedido> v_
         //            
         //            return new string[] { "value1", "value2" };
         //        }
 
-        // GET api/livros/5
+        // GET v1/pedidos/5
         [HttpGet("{id}")]
-        public IEnumerable<Livro> Get(int? id)
+        public Pedido Get(int id)
         {
-            Livro v_Livro = new Livro();
-            IEnumerable<Livro> v_ListaLivros = new List<Livro>();
-
-            v_ListaLivros = v_Livro.BuscarLivros(id);
-
-            //if (v_ListaLivros == null)
+            Pedido v_Pedido = new Pedido();
+            v_Pedido = v_Pedido.BuscarPedidos(id);
+            
+            //if (v_Pedido == null)
             //{
-                //falta gerar a exceção
+            //falta gerar a exceção
             //}
 
-            return v_ListaLivros;
+            return v_Pedido;
         }
 
-        // POST api/livros
+        // POST v1/pedidos
         [HttpPost]
-        public Livro Post([Bind("Id,Nome")] Livro value)
+        public Pedido Post([Bind("Id,CarrinhoLivros,Status")] Pedido Pedido)
         {
-            //if (value.Id > 100)
+            //if (value.Id <= 100)
             //{
             //  falta gerar a exceção
             //}
-
-            return new Livro()
+            
+            return new Pedido()
             {
-                Id = value.Id,
-                Nome = value.Nome
+                Id = Pedido.Id,
+                CarrinhoLivros = Pedido.CarrinhoLivros,
+                Status = Pedido.StatusDictionary()[2]
             };
         }
 
-        // PUT api/livros/5
+        // PUT v1/pedidos/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public Pedido Put(int id)
         {
-        }
-
-        // DELETE api/livros/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            //if (value.Id <= 100)
+            //{
+            //  falta gerar a exceção
+            //}
+            
+            Pedido Pedido = new Pedido();
+            return Pedido.RealizarPedido(id);
         }
     }
 }

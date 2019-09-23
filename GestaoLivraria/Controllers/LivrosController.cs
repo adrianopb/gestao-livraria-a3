@@ -44,17 +44,17 @@ namespace GestaoLivraria.Controllers
 
         // POST api/livros
         [HttpPost]
-        public Livro Post([Bind("Id,Nome")] Livro value)
+        public Livro Post([Bind("Id,Nome")] Livro Livro)
         {
-            //if (value.Id > 100)
+            //if (value.Id <= 100)
             //{
             //  falta gerar a exceção
             //}
 
             return new Livro()
             {
-                Id = value.Id,
-                Nome = value.Nome
+                Id = Livro.Id,
+                Nome = Livro.Nome
             };
         }
 
