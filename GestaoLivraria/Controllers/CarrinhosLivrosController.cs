@@ -15,6 +15,9 @@ namespace GestaoLivraria.Controllers
     public class CarrinhosLivrosController : ControllerBase
     {
         // POST v1/carrinhosLivros/{id_carrinhosLivros}/livros/{id_livros}
+        /// <summary>
+        /// Adiciona livro ao carrinho
+        /// </summary>
         [HttpPost]
         [Route("{idCarrinhosLivros:int}/livros/{idLivros:int}")]
         public CarrinhoLivros Post([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)
@@ -28,21 +31,22 @@ namespace GestaoLivraria.Controllers
 //                404 (carrinho não encontrado)
 //            }
 
-            Livro v_Livro = new Livro();
-            IEnumerable<Livro> v_LivroAdicionar = new List<Livro>();
-            v_LivroAdicionar = v_Livro.BuscarLivros(idLivros);
+            Livro v_LivroAdicionar = new Livro();
+            v_LivroAdicionar = v_LivroAdicionar.BuscarLivro(idLivros);
 
 //            if (v_LivroAdicionar == null)
 //            {
 //                404 (livro não encontrado)
 //            }
 
-            v_Livro = v_LivroAdicionar.First();
-            v_CarrinhoLivrosAdicionar.Livros.Add(v_Livro);
+            v_CarrinhoLivrosAdicionar.Livros.Add(v_LivroAdicionar);
             return v_CarrinhoLivrosAdicionar;
         }
 
         // DELETE v1/carrinhosLivros/{id_carrinhosLivros}/livros/{id_livros}
+        /// <summary>
+        /// Remove livro do carrinho
+        /// </summary>
         [HttpDelete]
         [Route("{idCarrinhosLivros}/livros/{idLivros}")]
         public CarrinhoLivros Delete([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)

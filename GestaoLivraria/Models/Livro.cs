@@ -11,16 +11,14 @@ namespace GestaoLivraria.Models
         public string Nome { get; set; }
         public List<Comentario> Comentarios { get; set; }
 
-        public IEnumerable<Livro> BuscarLivros(int? id)
+        public Livro BuscarLivro(int id)
         {
             var v_ListaLivros = new List<Livro>(ListaLivros());
 
-            if (id != null)
-            {
-                return v_ListaLivros.Any(q => q.Id == id) ? v_ListaLivros.Where(q => q.Id == id) : null;
-            }
-
-            return v_ListaLivros;
+            return v_ListaLivros.Any(q => q.Id == id) ? 
+                v_ListaLivros.SingleOrDefault(q => q.Id == id) :
+                null;
+            
         }
 
         public Livro BuscarLivroNoCarrinho(int p_CarrinhoId, int p_LivroId)
@@ -48,7 +46,7 @@ namespace GestaoLivraria.Models
             return v_Livro;
         }
         
-        public IEnumerable<Livro> ListaLivros()
+        public List<Livro> ListaLivros()
         {
             var v_ListaLivros = new List<Livro>();
 
@@ -58,6 +56,13 @@ namespace GestaoLivraria.Models
                 {
                     Id = i,
                     Nome = "Livro " + i,
+                    Comentarios = new List<Comentario>()
+                    {
+                        new Comentario()
+                        {
+                            Texto = "Comentário exemplo"
+                        }
+                    }
                 };
 
                 v_ListaLivros.Add(v_Livro);

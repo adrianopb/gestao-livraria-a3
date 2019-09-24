@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using GestaoLivraria.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoLivraria.Controllers
@@ -14,35 +9,45 @@ namespace GestaoLivraria.Controllers
     [ApiController]
     public class LivrosController : ControllerBase
     {
-        // GET api/livros
-        [HttpGet]
-        //        public ActionResult<IEnumerable<Livro>> Get()
-        //        {
-        //            Livro v_Livro = new Livro();
-        //            
-        //            List<Livro> v_
-        //            
-        //            return new string[] { "value1", "value2" };
-        //        }
-
         // GET api/livros/5
+
+        /// <summary>
+        /// Lista todos os livros
+        /// </summary>
+        /// <returns>Informações relativas a todos os livros</returns>
+        [HttpGet]
+        public IEnumerable<Livro> Get()
+        {
+            var v_Livro = new Livro();
+            var v_ListaLivros = new List<Livro>();
+            v_ListaLivros = v_Livro.ListaLivros();
+            return v_ListaLivros;
+        }
+        
+        /// <summary>
+        /// Procura livro específico
+        /// </summary>
+        /// <param name="id">Identificador do livro</param>
+        /// <returns>Informações relativas a um livro específico</returns>
         [HttpGet("{id}")]
-        public IEnumerable<Livro> Get(int? id)
+        public Livro GetById(int id)
         {
             Livro v_Livro = new Livro();
-            IEnumerable<Livro> v_ListaLivros = new List<Livro>();
 
-            v_ListaLivros = v_Livro.BuscarLivros(id);
+            v_Livro = v_Livro.BuscarLivro(id);
 
-            //if (v_ListaLivros == null)
-            //{
-                //falta gerar a exceção
-            //}
+            if (v_Livro == null) {
+                throw new Exception("404 não encontrado");
+            }
 
-            return v_ListaLivros;
+            return v_Livro;
         }
 
         // POST api/livros
+        
+        /// <summary>
+        /// Cadastra livro
+        /// </summary>
         [HttpPost]
         public Livro Post([Bind("Id,Nome")] Livro Livro)
         {
@@ -59,37 +64,27 @@ namespace GestaoLivraria.Controllers
         }
         
         // POST v1/livros/{id}/comentarios
+        
+        /// <summary>
+        /// Publica comentário do livro
+        /// </summary>
         [HttpPost]
         [Route("{id}/comentarios")]
         public Livro Post([FromRoute] int id,[Bind("Texto")] string texto)
         {
-            //if (value.Id <= 100)
-            //{
-            //  falta gerar a exceção
-            //}
 
             Livro v_Livro = new Livro();
-            IEnumerable<Livro> v_Livros = new List<Livro>();
+            v_Livro = v_Livro.BuscarLivro(id);
             
-            v_Livros = v_Livro.BuscarLivros(id);
-            v_Livro = v_Livros.Single();
+            //if (v_Livro == null)
+            //{
+            //  404
+            //}
             
             Comentario v_Comentario = new Comentario();
             v_Livro = v_Comentario.CriarComentario(id, texto);
 
             return v_Livro;
-        }
-
-        // PUT api/livros/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/livros/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

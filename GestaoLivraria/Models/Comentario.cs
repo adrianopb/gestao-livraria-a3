@@ -12,10 +12,7 @@ namespace GestaoLivraria.Models
         public Livro CriarComentario(int p_LivroId, string p_Text)
         {
             Livro v_Livro = new Livro();
-            IEnumerable<Livro> v_Livros = new List<Livro>();
-            
-            v_Livros = v_Livro.BuscarLivros(p_LivroId);
-            v_Livro = v_Livros.Single();
+            v_Livro = v_Livro.BuscarLivro(p_LivroId);
             
             Comentario v_Comentario = new Comentario()
             {

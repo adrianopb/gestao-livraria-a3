@@ -15,6 +15,9 @@ namespace GestaoLivraria.Controllers
     public class PedidosController : ControllerBase
     {
         // GET v1/pedidos/5
+        /// <summary>
+        /// Consulta pedido para ver status e detalhes
+        /// </summary>
         [HttpGet("{id}")]
         public Pedido Get(int id)
         {
@@ -23,21 +26,19 @@ namespace GestaoLivraria.Controllers
             
             //if (v_Pedido == null)
             //{
-            //falta gerar a exceção
+            // 404
             //}
 
             return v_Pedido;
         }
 
         // POST v1/pedidos
+        /// <summary>
+        /// Confirma o pedido
+        /// </summary>
         [HttpPost]
         public Pedido Post([Bind("Id,CarrinhoLivros,Status")] Pedido Pedido)
         {
-            //if (value.Id <= 100)
-            //{
-            //  falta gerar a exceção
-            //}
-            
             return new Pedido()
             {
                 Id = Pedido.Id,
@@ -47,15 +48,19 @@ namespace GestaoLivraria.Controllers
         }
 
         // PUT v1/pedidos/5
+        /// <summary>
+        /// Envia o pedido para entrega
+        /// </summary>
         [HttpPut("{id}")]
         public Pedido Put(int id)
         {
-            //if (value.Id <= 100)
+            Pedido Pedido = new Pedido();
+            
+            //if (v_Pedido == null)
             //{
-            //  falta gerar a exceção
+            // 404
             //}
             
-            Pedido Pedido = new Pedido();
             return Pedido.RealizarPedido(id);
         }
     }
