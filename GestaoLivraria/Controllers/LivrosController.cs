@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GestaoLivraria.Models;
+using GestaoLivraria.Util.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoLivraria.Controllers
@@ -16,12 +17,12 @@ namespace GestaoLivraria.Controllers
         /// </summary>
         /// <returns>Informações relativas a todos os livros</returns>
         [HttpGet]
-        public IEnumerable<Livro> Get()
+        public ActionResult<IEnumerable<Livro>> Get()
         {
             var v_Livro = new Livro();
             var v_ListaLivros = new List<Livro>();
             v_ListaLivros = v_Livro.ListaLivros();
-            return v_ListaLivros;
+            return Ok(v_ListaLivros);
         }
         
         /// <summary>
@@ -30,17 +31,17 @@ namespace GestaoLivraria.Controllers
         /// <param name="id">Identificador do livro</param>
         /// <returns>Informações relativas a um livro específico</returns>
         [HttpGet("{id}")]
-        public Livro GetById(int id)
+        public ActionResult<Livro> GetById(int id)
         {
             Livro v_Livro = new Livro();
 
             v_Livro = v_Livro.BuscarLivro(id);
 
             if (v_Livro == null) {
-                throw new Exception("404 não encontrado");
+                return  NotFound();
             }
 
-            return v_Livro;
+            return Ok(v_Livro);
         }
 
         // POST api/livros
@@ -49,18 +50,13 @@ namespace GestaoLivraria.Controllers
         /// Cadastra livro
         /// </summary>
         [HttpPost]
-        public Livro Post([Bind("Id,Nome")] Livro Livro)
+        public ActionResult<Livro> Post([Bind("Id,Nome")] Livro Livro)
         {
-            //if (value.Id <= 100)
-            //{
-            //  falta gerar a exceção
-            //}
-
-            return new Livro()
+            return Ok(new Livro()
             {
                 Id = Livro.Id,
                 Nome = Livro.Nome
-            };
+            });
         }
         
         // POST v1/livros/{id}/comentarios
@@ -70,21 +66,21 @@ namespace GestaoLivraria.Controllers
         /// </summary>
         [HttpPost]
         [Route("{id}/comentarios")]
-        public Livro Post([FromRoute] int id,[Bind("Texto")] string texto)
+        public ActionResult<Livro> Post([FromRoute] int id,[Bind("Texto")] string texto)
         {
 
             Livro v_Livro = new Livro();
             v_Livro = v_Livro.BuscarLivro(id);
             
-            //if (v_Livro == null)
-            //{
-            //  404
-            //}
+            if (v_Livro == null)
+            {
+                return NotFound();
+            }
             
             Comentario v_Comentario = new Comentario();
             v_Livro = v_Comentario.CriarComentario(id, texto);
 
-            return v_Livro;
+            return Ok(v_Livro);
         }
     }
 }

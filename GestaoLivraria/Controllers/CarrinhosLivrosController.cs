@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GestaoLivraria.Models;
+using GestaoLivraria.Util.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,24 +21,24 @@ namespace GestaoLivraria.Controllers
         /// </summary>
         [HttpPost]
         [Route("{idCarrinhosLivros:int}/livros/{idLivros:int}")]
-        public CarrinhoLivros Post([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)
+        public ActionResult<CarrinhoLivros> Post([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)
         {
             //Limpar código
             CarrinhoLivros v_CarrinhoLivrosAdicionar = new CarrinhoLivros();
             v_CarrinhoLivrosAdicionar = v_CarrinhoLivrosAdicionar.BuscarCarrinhoLivros(idCarrinhosLivros);
 
-//            if (v_CarrinhoLivrosAdicionar == null)
-//            {
-//                404 (carrinho não encontrado)
-//            }
+            if (v_CarrinhoLivrosAdicionar == null)
+            {
+                return NotFound();
+            }
 
             Livro v_LivroAdicionar = new Livro();
             v_LivroAdicionar = v_LivroAdicionar.BuscarLivro(idLivros);
 
-//            if (v_LivroAdicionar == null)
-//            {
-//                404 (livro não encontrado)
-//            }
+            if (v_LivroAdicionar == null)
+            {
+                return NotFound();
+            }
 
             v_CarrinhoLivrosAdicionar.Livros.Add(v_LivroAdicionar);
             return v_CarrinhoLivrosAdicionar;
@@ -49,17 +50,27 @@ namespace GestaoLivraria.Controllers
         /// </summary>
         [HttpDelete]
         [Route("{idCarrinhosLivros}/livros/{idLivros}")]
-        public CarrinhoLivros Delete([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)
+        public ActionResult<CarrinhoLivros> Delete([FromRoute] int idCarrinhosLivros, [FromRoute] int idLivros)
         {
             CarrinhoLivros v_CarrinhoLivrosRemover = new CarrinhoLivros();
             v_CarrinhoLivrosRemover = v_CarrinhoLivrosRemover.BuscarCarrinhoLivros(idCarrinhosLivros);
+
+            if (v_CarrinhoLivrosRemover == null)
+            {
+                return NotFound();
+            }
             
             Livro v_LivroRemover = new Livro();
             v_LivroRemover = v_LivroRemover.BuscarLivroNoCarrinho(idCarrinhosLivros, idLivros);
+
+            if (v_LivroRemover == null)
+            {
+                return NotFound();
+            }
             
             v_CarrinhoLivrosRemover.Livros.RemoveAll(q => q.Id == v_LivroRemover.Id);
             
-            return v_CarrinhoLivrosRemover;
+            return Ok(v_CarrinhoLivrosRemover);
         }
     }
 }

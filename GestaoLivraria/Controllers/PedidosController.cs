@@ -19,17 +19,17 @@ namespace GestaoLivraria.Controllers
         /// Consulta pedido para ver status e detalhes
         /// </summary>
         [HttpGet("{id}")]
-        public Pedido Get(int id)
+        public ActionResult<Pedido> Get(int id)
         {
             Pedido v_Pedido = new Pedido();
             v_Pedido = v_Pedido.BuscarPedidos(id);
-            
-            //if (v_Pedido == null)
-            //{
-            // 404
-            //}
 
-            return v_Pedido;
+            if (v_Pedido == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(v_Pedido);
         }
 
         // POST v1/pedidos
@@ -37,14 +37,14 @@ namespace GestaoLivraria.Controllers
         /// Confirma o pedido
         /// </summary>
         [HttpPost]
-        public Pedido Post([Bind("Id,CarrinhoLivros,Status")] Pedido Pedido)
+        public ActionResult<Pedido> Post([Bind("Id,CarrinhoLivros,Status")] Pedido Pedido)
         {
-            return new Pedido()
+            return Ok(new Pedido()
             {
                 Id = Pedido.Id,
                 CarrinhoLivros = Pedido.CarrinhoLivros,
                 Status = Pedido.StatusDictionary()[2]
-            };
+            });
         }
 
         // PUT v1/pedidos/5
@@ -52,16 +52,11 @@ namespace GestaoLivraria.Controllers
         /// Envia o pedido para entrega
         /// </summary>
         [HttpPut("{id}")]
-        public Pedido Put(int id)
+        public ActionResult<Pedido> Put(int id)
         {
-            Pedido Pedido = new Pedido();
+            Pedido v_Pedido = new Pedido();
             
-            //if (v_Pedido == null)
-            //{
-            // 404
-            //}
-            
-            return Pedido.RealizarPedido(id);
+            return Ok(v_Pedido.RealizarPedido(id));
         }
     }
 }
